@@ -1,16 +1,104 @@
-# Project 1 
+# Lasso Regression using Homotopy method
 
-Your objective is to implement the LASSO regularized regression model using the Homotopy Method. You can read about this method in [this](https://people.eecs.berkeley.edu/~elghaoui/Pubs/hom_lasso_NIPS08.pdf) paper and the references therein. You are required to write a README for your project. Please describe how to run the code in your project *in your README*. Including some usage examples would be an excellent idea. You may use Numpy/Scipy, but you may not use built-in models from, e.g. SciKit Learn. This implementation must be done from first principles. You may use SciKit Learn as a source of test data.
+This project implements the **Lasso Homotopy Algorithm**, a specialized approach for solving Lasso regression.
 
-You should create a virtual environment and install the packages in the requirements.txt in your virtual environment. You can read more about virtual environments [here](https://docs.python.org/3/library/venv.html). Once you've installed PyTest, you can run the `pytest` CLI command *from the tests* directory. I would encourage you to add your own tests as you go to ensure that your model is working as a LASSO model should (Hint: What should happen when you feed it highly collinear data?)
+## Team Members:
+1. Krishna Ram Saravanakumar - A20578833 (ksaravankumar@hawk.iit.edu)
+2. Govind Kurapati - A20581868 (gkurapati@hawk.iit.edu)
 
-In order to turn your project in: Create a fork of this repository, fill out the relevant model classes with the correct logic. Please write a number of tests that ensure that your LASSO model is working correctly. It should produce a sparse solution in cases where there is collinear training data. You may check small test sets into GitHub, but if you have a larger one (over, say 20MB), please let us know and we will find an alternative solution. In order for us to consider your project, you *must* open a pull request on this repo. This is how we consider your project is "turned in" and thus we will use the datetime of your pull request as your submission time. If you fail to do this, we will grade your project as if it is late, and your grade will reflect this as detailed on the course syllabus. 
+## Installation
 
-You may include Jupyter notebooks as visualizations or to help explain what your model does, but you will be graded on whether your model is correctly implemented in the model class files and whether we feel your test coverage is adequate. We may award bonus points for compelling improvements/explanations above and beyond the assignment.
+### **1️. Create a Virtual Environment**
+```sh
+python -m venv venv
+source venv/bin/activate  # On Mac/Linux
+venv\Scripts\activate      # On Windows
+```
 
-Put your README here. Answer the following questions.
+### **2️. Install Required Dependencies**
+```sh
+pip install -r requirements.txt
+```
 
-* What does the model you have implemented do and when should it be used?
-* How did you test your model to determine if it is working reasonably correctly?
-* What parameters have you exposed to users of your implementation in order to tune performance? 
-* Are there specific inputs that your implementation has trouble with? Given more time, could you work around these or is it fundamental?
+---
+
+### 3.  Running the Project  
+Execute the test script:  
+```sh
+pytest ./LassoHomotopy/tests/test_LassoHomotopy.py
+```
+
+## Questions:
+### 1. What does the implemented model do, and when should it be used?
+
+This model is an implementation of the LASSO regression (Least Absolute Shrinkage and Selection Operator) using the homotopy method.
+
+#### What it does:
+•	It solves LASSO problems by tracing the solution path as the regularization parameter lambda decreases.
+•	The model maintains an active set of selected features and iteratively updates the coefficients.
+•	Unlike standard solvers, it efficiently updates solutions instead of solving from scratch for each lambda.
+
+#### When to use it:
+•	When you need feature selection (LASSO encourages sparsity, i.e., it forces some coefficients to be exactly zero).
+•	When solving high-dimensional regression problems with more features than samples.
+•	When computational efficiency is important, as the homotopy method is faster than naive approaches for a sequence of lambda values.
+
+
+### 2. How did you test the model to determine if it is working correctly?
+
+The model was tested using:
+
+##### Basic correctness tests:
+•	Compared against known LASSO solutions (e.g., sklearn.linear_model.Lasso).
+•	Checked if increasing lambda results in sparser coefficients (expected behavior).
+
+##### Numerical stability tests:
+•	Verified that coefficients converge within the defined tol (tolerance).
+•	Ensured solutions are stable under small perturbations in input data.
+
+##### Edge cases:
+•	Tested zero data (all X values are zero) to see if coefficients remain zero.
+•	Checked highly correlated features to ensure consistent feature selection.
+
+
+### 3. What parameters have been exposed for performance tuning?
+
+The model exposes the following parameters:
+
+#### max_iter:
+•	Controls how many iterations the algorithm will run before stopping.
+•	Higher values allow for more accurate solutions but increase computation time.
+
+#### tol:
+•	The tolerance for stopping the algorithm.
+•	Lower values improve accuracy but may slow down convergence.
+
+#### lambda_min_ratio:
+•	Defines the smallest regularization value relative to lambda_max.
+•	Controls how far the algorithm follows the solution path.
+
+#### random_state:
+•	Could introduce random feature selection if desired.
+
+### 4. Are there specific inputs that the implementation struggles with?
+
+Yes, the model has difficulty with:
+
+Perfectly correlated features:
+•	The algorithm struggles to pick between them, causing numerical instability.
+•	Workaround: To apply feature selection before running the model.
+
+Extremely small lambda:
+•	Can lead to overfitting and numerical instability in matrix inversions.
+•	Workaround: To set a reasonable lambda_min_ratio.
+
+Very large feature sets (>10,000 features):
+•	The Gram matrix inversion in linalg.pinv(gram_matrix) can be expensive.
+•	Workaround: To use approximate solvers or modify the method for efficiency.
+
+
+#### Could these issues be solved with more time?
+
+Yes, for correlated features, we could use elastic net regularization instead of pure LASSO.
+Yes, for large feature sets, we could use coordinate descent to improve scalability.
+No, for very small lambda, because it is a fundamental issue with LASSO overfitting.
