@@ -5,8 +5,11 @@ import pytest
 from model.LassoHomotopy import LassoHomotopyModel
 
 # File paths for test datasets
-SMALL_TEST_FILE = "/Users/krishnaramsaravanakumar/Desktop/Krishnaram/CODING/ML/CS-584-PROJECT-1/LassoHomotopy/tests/small_test.csv"
-COLLINEAR_TEST_FILE = "/Users/krishnaramsaravanakumar/Desktop/Krishnaram/CODING/ML/CS-584-PROJECT-1/LassoHomotopy/tests/collinear_data.csv"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Construct dynamic file paths
+SMALL_TEST_FILE = os.path.join(SCRIPT_DIR, "tests", "small_test.csv")
+COLLINEAR_TEST_FILE = os.path.join(SCRIPT_DIR, "tests", "collinear_data.csv")
 
 def load_csv_data(filename):
     """Loads CSV data and returns feature matrix X and target vector y."""
@@ -124,18 +127,6 @@ def test_random_seed_impact(small_test_data):
     assert np.allclose(results_1.coef_, results_2.coef_), "Results should be identical since model is deterministic."
 
 
-'''''
-def test_random_seed_impact(small_test_data):
-    """Checks if model output is sensitive to different random seeds."""
-    X, y = small_test_data
-    model_1 = LassoHomotopyModel(random_state=42)
-    model_2 = LassoHomotopyModel(random_state=99)
-    
-    results_1 = model_1.fit(X, y)
-    results_2 = model_2.fit(X, y)
-
-    assert not np.allclose(results_1.coef_, results_2.coef_), "Different random seeds should yield different results."
-'''
 def test_model_output_consistency_on_same_input(small_test_data):
     """Ensures the model produces the same predictions given the same input multiple times."""
     X, y = small_test_data
