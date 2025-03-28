@@ -23,8 +23,6 @@ venv\Scripts\activate      # On Windows
 pip install -r requirements.txt
 ```
 
----
-
 ### 3. Running the Project
 
 Execute the test script:
@@ -32,6 +30,22 @@ Execute the test script:
 ```sh
 pytest ./LassoHomotopy/tests/test_LassoHomotopy.py
 ```
+
+---
+
+### Lasso Regression with Homotopy Method
+
+Lasso Regression (Least Absolute Shrinkage and Selection Operator) is a linear regression technique that performs feature selection and regularization to improve model performance. It adds an L1 penalty to the loss function, which forces some feature coefficients to shrink to zero, effectively eliminating them from the model.
+
+This project implements Lasso Regression using the Homotopy Method, which provides an efficient way to compute the entire solution path as the regularization parameter changes.
+
+### Key Features of Lasso Regression:
+
+- Feature Selection: Automatically sets some coefficients to zero, selecting only relevant features.
+- Prevents Overfitting: Reduces model complexity, improving generalization.
+- Sparse Solutions: Works well for high-dimensional data by ignoring irrelevant features.
+
+---
 
 ## Questions:
 
@@ -117,3 +131,11 @@ Very large feature sets (>10,000 features):
 Yes, correlated features can be addressed by using elastic net regularization, which combines LASSO and Ridge penalties to handle multicollinearity more effectively.  
 Yes, for datasets with a large number of features, switching to a coordinate descent algorithm can significantly improve scalability and computational efficiency.  
 However, if the problem is caused by choosing a very small lambda, it leads to overfitting, which is a fundamental limitation of LASSO and cannot be completely avoided.
+
+---
+
+
+#### Comparison with scikit-learn implementation:
+We compared the performance of our Lasso regression implementation using the Homotopy Method with the widely used scikit-learn Lasso regression. The results and comparison will be visualized in the image below.
+
+![comparision_output](./LassoHomotopy/plots/comparison_plot.png)
