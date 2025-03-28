@@ -74,22 +74,22 @@ The model was tested using:
 
 The model exposes the following parameters:
 
-#### max_iter:
+#### `max_iter`:
 
 - Controls how many iterations the algorithm will run before stopping.
 - Higher values allow for more accurate solutions but increase computation time.
 
-#### tol:
+#### `tol`:
 
 - The tolerance for stopping the algorithm.
 - Lower values improve accuracy but may slow down convergence.
 
-#### lambda_min_ratio:
+#### `lambda_min_ratio`:
 
 - Defines the smallest regularization value relative to lambda_max.
 - Controls how far the algorithm follows the solution path.
 
-#### random_state:
+#### `random_state`:
 
 - Could introduce random feature selection if desired.
 
@@ -114,6 +114,6 @@ Very large feature sets (>10,000 features):
 
 #### Could these issues be solved with more time?
 
-Yes, for correlated features, we could use elastic net regularization instead of pure LASSO.
-Yes, for large feature sets, we could use coordinate descent to improve scalability.
-No, for very small lambda, because it is a fundamental issue with LASSO overfitting.
+Yes, correlated features can be addressed by using elastic net regularization, which combines LASSO and Ridge penalties to handle multicollinearity more effectively.  
+Yes, for datasets with a large number of features, switching to a coordinate descent algorithm can significantly improve scalability and computational efficiency.  
+However, if the problem is caused by choosing a very small lambda, it leads to overfitting, which is a fundamental limitation of LASSO and cannot be completely avoided.
